@@ -1,9 +1,22 @@
+<!--
+    Same dial scaled into the 24dp status-bar box (factor 20/56), top margin 2.43dp; white only.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path
+        android:pathData="M3.958,17.343 A9.286,9.286 0 1 1 20.042,17.343"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="1.96"
+        android:strokeLineCap="butt" />
+    <path
+        android:pathData="M12,12.7 L14.679,8.061"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="1.43"
+        android:strokeLineCap="round" />
+    <path
         android:fillColor="@android:color/white"
-        android:pathData="M12,3C7.03,3 3,7.03 3,12s4.03,9 9,9 9,-4.03 9,-9S16.97,3 12,3zM12,19c-3.87,0 -7,-3.13 -7,-7s3.13,-7 7,-7 7,3.13 7,7 -3.13,7 -7,7zM12,7c-2.76,0 -5,2.24 -5,5h2c0,-1.65 1.35,-3 3,-3s3,1.35 3,3h2c0,-2.76 -2.24,-5 -5,-5z" />
+        android:pathData="M12,12.7 m-1.43,0 a1.43,1.43 0 1 0 2.86,0 a1.43,1.43 0 1 0 -2.86,0" />
 </vector>

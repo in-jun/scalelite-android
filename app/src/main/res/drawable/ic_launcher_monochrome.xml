@@ -1,9 +1,5 @@
 <!--
-    Dial glyph on the 108dp adaptive-icon canvas. Everything is concentric on (54, 58):
-    the arc (radius 26, stroke 5.5, 240 degree sweep from 150 to 30 with the gap at the
-    bottom), the needle (length 15, pointing to 300 degrees) and the hub (radius 4). The
-    arc's outer edge at 28.75dp stays inside the 33dp safe zone; the 4dp downward offset
-    centres the arc optically.
+    Themed-icon layer: the same dial in one colour; the launcher applies its own tint.
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
@@ -12,7 +8,7 @@
     android:viewportHeight="108">
     <path
         android:pathData="M31.483,71.000 A26.000,26.000 0 1 1 76.517,71.000"
-        android:strokeColor="@color/ic_launcher_dial"
+        android:strokeColor="#FFFFFF"
         android:strokeWidth="5.5"
         android:strokeLineCap="butt" />
     <path
