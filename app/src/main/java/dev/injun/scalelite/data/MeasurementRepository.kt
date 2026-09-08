@@ -32,19 +32,25 @@ class MeasurementRepository @Inject constructor(
         )
         val id = dao.insert(row)
         if (id == -1L) return null
-        val saved = row.copy(id = id)
-        sync(saved)
-        return saved
+        return sync(row.copy(id = id))
     }
 
     /** Retries every row that has not reached Health Connect yet. Returns how many succeeded. */
-    suspend fun syncPending(): Int = dao.pendingHealthConnect().count { sync(it) }
+    suspend fun syncPending(): Int = dao.pendingHealthConnect().count { sync(it).healthConnectId != null }
 
-    private suspend fun sync(row: MeasurementEntity): Boolean =
-        healthConnect.writeWeight(row.epochMillis, row.grams)
-            .onSuccess { dao.markSynced(row.id, it) }
-            .onFailure { dao.markSyncFailed(row.id, it.message ?: it.javaClass.simpleName) }
-            .isSuccess
+    /** Pushes [row] to Health Connect and returns the row as it now stands in the database. */
+    private suspend fun sync(row: MeasurementEntity): MeasurementEntity =
+        healthConnect.writeWeight(row.epochMillis, row.grams).fold(
+            onSuccess = { recordId ->
+                dao.markSynced(row.id, recordId)
+                row.copy(healthConnectId = recordId, healthConnectError = null)
+            },
+            onFailure = { error ->
+                val message = error.message ?: error.javaClass.simpleName
+                dao.markSyncFailed(row.id, message)
+                row.copy(healthConnectError = message)
+            },
+        )
 
     suspend fun delete(id: Long) = dao.delete(id)
 }
