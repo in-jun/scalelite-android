@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.injun.scalelite.ble.BackgroundStart
 import dev.injun.scalelite.ble.ScanRegistrar
 import dev.injun.scalelite.data.DeviceRepository
 import dev.injun.scalelite.data.MeasurementRepository
@@ -33,6 +34,8 @@ data class HomeUiState(
     val weighing: WeighingState = WeighingState.Idle,
     val healthConnect: HealthConnectStatus = HealthConnectStatus.AVAILABLE,
     val healthConnectGranted: Boolean = false,
+    /** False when Android would refuse to start the weigh-in from a background wake. */
+    val backgroundStartAllowed: Boolean = true,
 )
 
 @HiltViewModel
@@ -48,6 +51,7 @@ class HomeViewModel @Inject constructor(
     val healthConnectPermissions: Set<String> get() = healthConnect.permissions
 
     private val healthConnectState = MutableStateFlow(HealthConnectStatus.AVAILABLE to false)
+    private val backgroundStartAllowed = MutableStateFlow(BackgroundStart.allowed(context))
 
     private data class Data(
         val devices: List<DeviceEntity>,
@@ -62,7 +66,7 @@ class HomeViewModel @Inject constructor(
     ) { devices, history, latest -> Data(devices, history, latest.firstOrNull()) }
 
     val uiState: StateFlow<HomeUiState> =
-        combine(data, registrar.enabled, monitor.state, healthConnectState) { data, enabled, weighing, hc ->
+        combine(data, registrar.enabled, monitor.state, healthConnectState, backgroundStartAllowed) { data, enabled, weighing, hc, bgAllowed ->
             HomeUiState(
                 devices = data.devices,
                 latest = data.latest,
@@ -72,16 +76,22 @@ class HomeViewModel @Inject constructor(
                 weighing = weighing,
                 healthConnect = hc.first,
                 healthConnectGranted = hc.second,
+                backgroundStartAllowed = bgAllowed,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS), HomeUiState())
 
-    /** Called on every resume: permissions can change behind the app's back. */
+    /**
+     * Called on every resume: permissions can change behind the app's back, and a
+     * force-stop cancels the scan's PendingIntent, so the registration is renewed too.
+     */
     fun refresh() {
         viewModelScope.launch {
+            backgroundStartAllowed.value = BackgroundStart.allowed(context)
             val status = healthConnect.status()
             val granted = status == HealthConnectStatus.AVAILABLE && healthConnect.hasPermissions()
             healthConnectState.value = status to granted
             if (granted) measurements.syncPending()
+            registrar.register()
         }
     }
 

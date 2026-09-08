@@ -45,6 +45,7 @@ import dev.injun.scalelite.data.db.DeviceEntity
 import dev.injun.scalelite.data.db.MeasurementEntity
 import dev.injun.scalelite.data.health.HealthConnectStatus
 import dev.injun.scalelite.service.WeighingState
+import dev.injun.scalelite.ui.openBatteryOptimizationSettings
 import dev.injun.scalelite.ui.openHealthConnectInstall
 import dev.injun.scalelite.ui.rememberBluetoothPermission
 import dev.injun.scalelite.ui.rememberBluetoothPermissionRequest
@@ -139,6 +140,15 @@ fun HomeScreen(
             }
             if (!notificationsEnabled) {
                 item { Banner("Notifications are off; you will not see recorded weights or problems.", "Turn on", onRequestNotifications) }
+            }
+            if (state.backgroundEnabled && !state.backgroundStartAllowed) {
+                item {
+                    Banner(
+                        "Background recording needs battery optimization turned off for Scale Lite; " +
+                            "otherwise Android stops the app when the scale wakes it.",
+                        "Open settings",
+                    ) { openBatteryOptimizationSettings(context) }
+                }
             }
 
             item { LatestCard(state.latest, state.weighing) }
