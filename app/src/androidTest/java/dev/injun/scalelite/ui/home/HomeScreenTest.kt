@@ -67,7 +67,7 @@ class HomeScreenTest {
             ScaleLiteTheme { HomeScreen(state = HomeUiState(healthConnect = HealthConnectStatus.AVAILABLE, healthConnectGranted = false)) }
         }
 
-        composeTestRule.onNodeWithText("Allow ScaleLite to write weight to Health Connect.").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Allow Scale Lite to write weight to Health Connect.").assertIsDisplayed()
     }
 }
 

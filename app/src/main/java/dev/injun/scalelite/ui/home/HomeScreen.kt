@@ -112,7 +112,7 @@ fun HomeScreen(
         modifier = modifier,
         topBar = {
             TopAppBar(
-                title = { Text("ScaleLite") },
+                title = { Text("Scale Lite") },
                 actions = {
                     IconButton(onClick = onDiagnostics) { Icon(Icons.Outlined.Info, contentDescription = "Diagnostics") }
                 },
@@ -135,7 +135,7 @@ fun HomeScreen(
                     ) { openHealthConnectInstall(context) }
                 }
             } else if (!state.healthConnectGranted) {
-                item { Banner("Allow ScaleLite to write weight to Health Connect.", "Allow", onRequestHealthConnect) }
+                item { Banner("Allow Scale Lite to write weight to Health Connect.", "Allow", onRequestHealthConnect) }
             }
             if (!notificationsEnabled) {
                 item { Banner("Notifications are off; you will not see recorded weights or problems.", "Turn on", onRequestNotifications) }

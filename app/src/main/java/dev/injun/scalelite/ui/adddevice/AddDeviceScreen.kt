@@ -106,7 +106,7 @@ fun AddDeviceScreen(
                 is AddDeviceStep.Unsupported -> {
                     Text("${step.scale.label()} is not a supported scale.", style = MaterialTheme.typography.titleMedium)
                     Text(
-                        "It exposes services ${step.services.joinToString()} but not the layout ScaleLite understands.",
+                        "It exposes services ${step.services.joinToString()} but not the layout Scale Lite understands.",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

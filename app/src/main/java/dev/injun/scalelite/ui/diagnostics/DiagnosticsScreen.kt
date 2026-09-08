@@ -108,7 +108,7 @@ fun DiagnosticsScreen(
                 Text(
                     "If weigh-ins reach Health Connect but not Samsung Health: in Samsung Health open Settings, " +
                         "scroll to Consent and turn on health data processing, then reboot. Also make sure Health " +
-                        "Connect grants Samsung Health read access for weight, and exclude ScaleLite from sleeping apps.",
+                        "Connect grants Samsung Health read access for weight, and exclude Scale Lite from sleeping apps.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
